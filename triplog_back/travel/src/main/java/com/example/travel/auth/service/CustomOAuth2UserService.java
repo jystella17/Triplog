@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -48,13 +49,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
 
         // DB에서 찾을 수 있는 이미 가입된 유저인지
-        User isAlready = userRepository.findByUniqueId(attributes.getUniqueId());
-        if(isAlready != null) {
-            return UserPrincipal.create(isAlready, oAuth2User.getAttributes());
+        Optional<User> isAlready = userRepository.findUserByUniqueId(attributes.getUniqueId());
+        if(isAlready.isEmpty()) {
+            return UserPrincipal.create(isAlready.get(), oAuth2User.getAttributes());
         }
 
-        isAlready = createUser(attributes, provider);
-        return UserPrincipal.create(isAlready, oAuth2User.getAttributes());
+        isAlready = Optional.of(createUser(attributes, provider));
+        return UserPrincipal.create(isAlready.get(), oAuth2User.getAttributes());
     }
 
     private User createUser(OAuthAttributes attributes, String provider) throws SQLException {
@@ -66,7 +67,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         User user = new User(attributes.getUniqueId(), attributes.getEmail(), attributes.getNickname(),
                 RoleType.USER, pt, LocalDateTime.now(), LocalDateTime.now());
 
-        userRepository.registerSocial(user);
+        userRepository.save(user);
         return user;
     }
 }

@@ -108,18 +108,18 @@ public class JwtTokenProvider { // 유효한 JWT Token 생성
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         String uniqueId = userPrincipal.getUniqueId();
 
-        User targetUser = userRepository.findByUniqueId(uniqueId);
-        if(targetUser == null) {
+        Optional<User> targetUser = userRepository.findUserByUniqueId(uniqueId);
+        if(targetUser.isEmpty()) {
             throw new Exception("Cannot find user");
         }
 
-        Token refresh = Token.builder().email(targetUser.getEmail()).refreshToken(refreshToken).build();
+        Token refresh = Token.builder().email(targetUser.get().getEmail()).refreshToken(refreshToken).build();
         tokenRepository.save(refresh); // 새로 발급받은 토큰 저장
     }
 
     // Request에 포함된 JWT Token (Access Token)으로 인증 정보 조회 및 Authentication 객체 생성
     public Authentication getAuthentication(String accessToken) {
-        User user;
+        Optional<User> user;
         Claims claims = parseClaims(accessToken);
 
         Collection<? extends GrantedAuthority> authorities =
@@ -127,11 +127,11 @@ public class JwtTokenProvider { // 유효한 JWT Token 생성
                         .map(SimpleGrantedAuthority::new).toList();
 
         try{
-            user = userRepository.findByUniqueId(claims.getSubject());
+            user = userRepository.findUserByUniqueId(claims.getSubject());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        UserPrincipal principal = UserPrincipal.create(user);
+        UserPrincipal principal = UserPrincipal.create(user.get());
 
         // JwtAuthenticationFilter에서 입력받은 Access Token + 유저 정보로 Authentication 객체 생성 및 리턴
         return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -39,7 +40,7 @@ public class UserService {
 
     @Transactional
     public UserRespDto login(String email, String pw) throws Exception {
-        User user = userRepository.login(email);
+        User user = userRepository.login(email).orElseThrow();
 
         if(!passwordEncoder.matches(pw, user.getPw())) {
             throw new SQLException("Your email or password does not match");
@@ -58,25 +59,25 @@ public class UserService {
         tokenProvider.createRefreshToken(authentication, response);
 
         return UserRespDto.builder().uid(user.getUid()).email(user.getEmail())
-                .nickname(user.getNickname()).travel_count(user.getTravel_count()).level(user.getLevel()).build();
+                .nickname(user.getNickname()).travel_count(user.getTravelCount()).level(user.getLevel()).build();
     }
 
     @Transactional
     public void register(String email, String pw, String nickname) throws SQLException {
-        if(userRepository.findByEmail(email) == null) {
+        if(userRepository.findUserByEmail(email).isEmpty()) {
             pw = passwordEncoder.encode(pw);
             String unique = passwordEncoder.encode(pw).substring(7, 20);
             RegisterDto registerInfo = new RegisterDto(unique, pw, email, nickname, RoleType.USER, ProviderType.NO);
 
-            userRepository.register(registerInfo);
+            userRepository.save(registerInfo);
         }
         else {
             throw new SQLException("이미 가입된 유저입니다.");
         }
     }
     @Transactional
-    public void modifyNickname(Long uid, String nickname) {
-        userRepository.modifyNickname(uid, nickname);
+    public Optional<User> modifyNickname(Long uid, String nickname) {
+        return userRepository.updateUserByNickname(nickname);
     }
 
     @Transactional
@@ -93,15 +94,15 @@ public class UserService {
         return rtk;
     }
 
-    public int changePassword(Long uid, String curPw, String newPw) throws SQLException {
-        String originalPw = userRepository.findUserByUid(uid);
+    public Optional<User> changePassword(Long uid, String curPw, String newPw) throws SQLException {
+        String originalPw = String.valueOf(userRepository.findUserByUid(uid));
 
         if(!passwordEncoder.matches(curPw, originalPw)) {
             throw new SQLException("Your email or password does not match");
         }
 
         newPw = passwordEncoder.encode(newPw);
-        return userRepository.changePw(uid, newPw);
+        return userRepository.updateUserByPw(newPw);
     }
 
     public void logout() {
