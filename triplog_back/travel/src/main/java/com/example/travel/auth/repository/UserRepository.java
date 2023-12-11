@@ -30,7 +30,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findUserByEmail(String email) throws SQLException;
 
-    Optional<User> updateUserByPw(String pw) throws SQLException;
+    void updateUserByPw(String pw) throws SQLException;
 
-    Optional<User> updateUserByNickname(String nickname);
+    void updateUserByNickname(String nickname);
 }

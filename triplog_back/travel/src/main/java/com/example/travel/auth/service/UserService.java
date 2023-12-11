@@ -76,8 +76,8 @@ public class UserService {
         }
     }
     @Transactional
-    public Optional<User> modifyNickname(Long uid, String nickname) {
-        return userRepository.updateUserByNickname(nickname);
+    public void modifyNickname(Long uid, String nickname) {
+        userRepository.updateUserByNickname(nickname);
     }
 
     @Transactional
@@ -94,7 +94,7 @@ public class UserService {
         return rtk;
     }
 
-    public Optional<User> changePassword(Long uid, String curPw, String newPw) throws SQLException {
+    public void changePassword(Long uid, String curPw, String newPw) throws SQLException {
         String originalPw = String.valueOf(userRepository.findUserByUid(uid));
 
         if(!passwordEncoder.matches(curPw, originalPw)) {
@@ -102,7 +102,7 @@ public class UserService {
         }
 
         newPw = passwordEncoder.encode(newPw);
-        return userRepository.updateUserByPw(newPw);
+        userRepository.updateUserByPw(newPw);
     }
 
     public void logout() {

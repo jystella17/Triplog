@@ -1,25 +1,19 @@
 package com.example.travel.board.repository;
+
 import com.example.travel.board.entity.Board;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.*;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
-@Mapper
-public interface BoardRepository {
-    void writeArticle(Board board) throws SQLException;
+public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    List<Board> listArticle(Map<String, Object> param) throws SQLException;
+    Optional<Board> findBy(Long id) throws SQLException;
 
-    int getTotalArticleCount(Map<String, Object> param) throws SQLException;
+    @Query(value = "update Board set hit = hit + 1 where id = :id")
+    void updateBoardByHit(Long id) throws SQLException;
 
-    Board getArticle(Long articleNo) throws SQLException;
-
-    void updateHit(Long articleNo) throws SQLException;
-
-    void modifyArticle(Board board) throws SQLException;
-
-    void deleteArticle(Long articleNo) throws SQLException;
+    @Query(value = "update Board set subject = :subject, content = :content where id = :id")
+    void updateArticle(String subject, String content, Long id) throws SQLException;
 }

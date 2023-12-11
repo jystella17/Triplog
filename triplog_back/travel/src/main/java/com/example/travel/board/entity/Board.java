@@ -1,41 +1,47 @@
 package com.example.travel.board.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+import jakarta.persistence.*;
+import jakarta.validation.Constraint;
+
+import com.example.travel.auth.entity.User;
 
 @Getter
-@ToString
+@Entity
+@Table(name = "board")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
 
-    private Long articleNo;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    private Long uid;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "uid")
+    private User writer;
 
-    private String nickname;
-
+    @Column(name = "subject")
     private String subject;
 
+    @Column(name = "content")
     private String content;
 
+    @Column(name = "hit")
     private int hit;
 
+    @Column(name = "register_time")
     private String registerTime;
 
-    public Board() {
-    }
-
     @Builder
-    public Board(Long uid, String subject, String content) {
-        this.uid = uid;
+    public Board(User writer, String subject, String content) {
+        this.writer = writer;
         this.subject = subject;
         this.content = content;
     }
 
     @Builder
-    public Board(Long uid, String nickname, String subject, String content, int hit, String registerTime) {
-        this.uid = uid;
-        this.nickname = nickname;
+    public Board(User writer, String subject, String content, int hit, String registerTime) {
+        this.writer = writer;
         this.subject = subject;
         this.content = content;
         this.hit = hit;
@@ -43,11 +49,9 @@ public class Board {
     }
 
     @Builder
-    public Board(Long articleNo, Long uid, String nickname, String subject, String content,
-                 int hit, String registerTime) {
-        this.articleNo = articleNo;
-        this.uid = uid;
-        this.nickname = nickname;
+    public Board(Long id, User writer, String subject, String content, int hit, String registerTime) {
+        this.id = id;
+        this.writer = writer;
         this.subject = subject;
         this.content = content;
         this.hit = hit;

@@ -58,14 +58,14 @@ public class BoardController {
         log.info("getArticle - 호출 : " + articleno);
 
         boardService.updateHit(articleno);
-        return new ResponseEntity<Board>(boardService.getArticle(articleno), HttpStatus.OK);
+        return new ResponseEntity<Board>(boardService.getArticle(articleno).get(), HttpStatus.OK);
     }
 
     @GetMapping("/modify/{articleno}")
     public ResponseEntity<Board> getModifyArticle(@PathVariable("articleno") Long articleno) throws Exception {
         log.info("getModifyArticle - 호출 : " + articleno);
 
-        return new ResponseEntity<>(boardService.getArticle(articleno), HttpStatus.OK);
+        return new ResponseEntity<>(boardService.getArticle(articleno).get(), HttpStatus.OK);
     }
 
     @PutMapping

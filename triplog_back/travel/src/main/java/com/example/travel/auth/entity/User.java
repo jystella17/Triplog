@@ -18,11 +18,14 @@ public class User {
     @Column(name = "unique_id")
     private String uniqueId;
 
+    @Column(name = "pw")
     private String pw;
 
     @NotNull
+    @Column(name = "email")
     private String email;
 
+    @Column(name = "nickname")
     private String nickname;
 
     @Column(name = "role_type")
@@ -40,6 +43,7 @@ public class User {
     @Column(name = "travel_count")
     private Integer travelCount;
 
+    @Column(name = "level")
     private Integer level;
 
     @Builder // 소셜 로그인으로 가입하는 경우
