@@ -59,7 +59,7 @@ public class UserService {
         tokenProvider.createRefreshToken(authentication, response);
 
         return UserRespDto.builder().uid(user.getUid()).email(user.getEmail())
-                .nickname(user.getNickname()).travel_count(user.getTravelCount()).level(user.getLevel()).build();
+                .nickname(user.getNickname()).travelCount(user.getTravelCount()).level(user.getLevel()).build();
     }
 
     @Transactional

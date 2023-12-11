@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-
 public interface UserRepository extends JpaRepository<User, Long> {
 
     // 직접 가입한 회원에 대한 로그인 처리

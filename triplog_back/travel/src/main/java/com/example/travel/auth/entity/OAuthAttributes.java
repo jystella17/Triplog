@@ -47,11 +47,11 @@ public class OAuthAttributes { // OAuth2User의 return 값은 Map 형태이므�
 
     public User toEntity(){
         return User.builder()
-                .unique_id(uniqueId)
+                .uniqueId(uniqueId)
                 .email(email)
                 .nickname(nickname)
-                .role_type(RoleType.USER)
-                .provider_type(ProviderType.KAKAO)
+                .roleType(RoleType.USER)
+                .providerType(ProviderType.KAKAO)
                 .build();
     }
 }

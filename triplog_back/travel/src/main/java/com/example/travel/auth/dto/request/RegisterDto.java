@@ -11,25 +11,25 @@ import java.time.LocalDateTime;
 @Getter
 public class RegisterDto implements Serializable {
 
-    private final String unique_id;
+    private final String uniqueId;
     private final String pw;
     private final String email;
     private final String nickname;
-    private final RoleType role_type;
-    private final ProviderType provider_type;
-    private final LocalDateTime created_at;
-    private final LocalDateTime modified_at;
+    private final RoleType roleType;
+    private final ProviderType providerType;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime modifiedAt;
 
     @Builder
-    public RegisterDto(String unique_id, String pw, String email, String nickname,
-                       RoleType role_type, ProviderType provider_type) {
-        this.unique_id = unique_id;
+    public RegisterDto(String uniqueId, String pw, String email, String nickname,
+                       RoleType roleType, ProviderType providerType) {
+        this.uniqueId = uniqueId;
         this.pw = pw;
         this.email = email;
         this.nickname = nickname;
-        this.role_type = role_type;
-        this.provider_type = provider_type;
-        this.created_at = LocalDateTime.now();
-        this.modified_at = LocalDateTime.now();
+        this.roleType = roleType;
+        this.providerType = providerType;
+        this.createdAt = LocalDateTime.now();
+        this.modifiedAt = LocalDateTime.now();
     }
 }

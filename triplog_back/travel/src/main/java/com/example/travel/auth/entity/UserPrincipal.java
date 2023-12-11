@@ -15,16 +15,21 @@ import java.util.Map;
 public class UserPrincipal implements OAuth2User, UserDetails {
 
     private final Long uid;
+
     private final String uniqueId;
+
     private final String pw;
 
     private final String email;
+
     private final String nickname;
 
     private final RoleType roleType;
+
     private final ProviderType providerType;
 
     private final Collection<GrantedAuthority> authorities;
+
     private Map<String, Object> attributes;
 
     public UserPrincipal(Long uid, String uniqueId, String pw, String email, String nickname, RoleType roleType,
@@ -41,11 +46,11 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     public static UserPrincipal create(User user) {
         List<GrantedAuthority> authorities = Collections.singletonList(
-                new SimpleGrantedAuthority(user.getRole_type().getCode()));
+                new SimpleGrantedAuthority(user.getRoleType().getCode()));
 
         return new UserPrincipal(
-                user.getUid(), user.getUnique_id(), user.getPw(), user.getEmail(), user.getNickname(),
-                user.getRole_type(), user.getProvider_type(), authorities
+                user.getUid(), user.getUniqueId(), user.getPw(), user.getEmail(), user.getNickname(),
+                user.getRoleType(), user.getProviderType(), authorities
         );
     }
 

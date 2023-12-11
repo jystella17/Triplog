@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -23,16 +24,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String uniqueId) throws UsernameNotFoundException {
-        User user;
+        Optional<User> user;
 
         try {
-            user = userRepository.findByUniqueId(uniqueId);
+            user = userRepository.findUserByUniqueId(uniqueId);
         } catch (SQLException | UsernameNotFoundException e) {
             log.info(e.getMessage());
             throw new UsernameNotFoundException("Cannot find User Information");
         }
 
-        log.info("UserPrincipal: " + user.getUnique_id() + " " + user.getEmail());
-        return UserPrincipal.create(user);
+        log.info("UserPrincipal: " + user.get().getUniqueId() + " " + user.get().getEmail());
+        return UserPrincipal.create(user.get());
     }
 }
