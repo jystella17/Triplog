@@ -1,20 +1,18 @@
 package com.example.travel.route.repository;
 
 import com.example.travel.route.entity.SpotInfo;
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.dao.DataAccessException;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.sql.SQLException;
 import java.util.List;
 
-@Mapper
-public interface SpotInfoRepository {
+public interface SpotInfoRepository extends JpaRepository<SpotInfo, Long> {
 
     List<SpotInfo> findAllSpotInfo();
     SpotInfo findSpotInfoById(Long spot_id);
     List<SpotInfo> findSpotInfoByName(String spotName) throws SQLException;
     int addSpotInfo(List<SpotInfo> spotInfoList);
-    int addOneSpotInfo(SpotInfo spotInfo) throws DataAccessException;
+    int addOneSpotInfo(SpotInfo spotInfo) throws SQLException;
     int delete(Long spot_id);
     int modify(SpotInfo spot);
 }

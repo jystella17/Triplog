@@ -1,18 +1,24 @@
 package com.example.travel.route.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+import jakarta.persistence.*;
 
 @Getter
-@ToString
+@Entity
+@Table(name = "keyword_list")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class KeywordList {
-    private Long key_id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "keyword")
     private String keyword;
 
     @Builder
-    public KeywordList(Long key_id, String keyword) {
-        this.key_id = key_id;
+    public KeywordList(Long id, String keyword) {
+        this.id = id;
         this.keyword = keyword;
     }
 }

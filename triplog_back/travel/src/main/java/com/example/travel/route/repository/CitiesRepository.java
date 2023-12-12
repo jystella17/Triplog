@@ -1,20 +1,11 @@
 package com.example.travel.route.repository;
 
 import com.example.travel.route.entity.Cities;
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-@Mapper
-public interface CitiesRepository {
+public interface CitiesRepository extends JpaRepository<Cities, Long> {
 
-    int addCities(Cities city);
-
-    Cities findCitiesById(Long city_id);
-
-    List<Cities> findAllCities();
-
-    int delete(Long city_id);
-
-    int modify(Cities city);
 }

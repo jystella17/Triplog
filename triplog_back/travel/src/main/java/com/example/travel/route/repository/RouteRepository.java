@@ -1,13 +1,12 @@
 package com.example.travel.route.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.travel.route.dto.response.RouteResponseDto;
 import com.example.travel.route.entity.Route;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-@Mapper
-public interface RouteRepository {
+public interface RouteRepository extends JpaRepository<Route, Long> {
 
     List<RouteResponseDto> findAllRoute();
     RouteResponseDto findRouteById(Long route_id);

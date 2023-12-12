@@ -1,26 +1,29 @@
 package com.example.travel.route.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
-@ToString
+@Entity
+@Table(name = "route_place")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoutePlace {
 
-    private Long place_id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    private final Long spot_id;
+    private Long spot_id;
 
-    private final Long route_id;
+    private Long route_id;
 
-    private final String rp_name;
+    private String rp_name;
 
     private int priority;
 
-    private final LocalDateTime visit_time;
+    private LocalDateTime visit_time;
 
 
     @Builder
@@ -34,8 +37,8 @@ public class RoutePlace {
 
 
     @Builder
-    public RoutePlace(Long place_id, Long spot_id, Long route_id, String rp_name, int priority, LocalDateTime visit_time) {
-        this.place_id = place_id;
+    public RoutePlace(Long id, Long spot_id, Long route_id, String rp_name, int priority, LocalDateTime visit_time) {
+        this.id = id;
         this.spot_id = spot_id;
         this.route_id = route_id;
         this.rp_name = rp_name;

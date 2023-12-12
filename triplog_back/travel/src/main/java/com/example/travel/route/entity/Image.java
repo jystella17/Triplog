@@ -1,31 +1,40 @@
 package com.example.travel.route.entity;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
 
 @Getter
+@Entity
+@Table(name = "image")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image {
 
-    private Long img_id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    private String img_name;
+    @Column(name = "img_name")
+    private String imgName;
 
-    private String img_key;
+    @Column(name = "img_key")
+    private String imgKey;
 
-    private String img_url;
-
-    public Image() {}
+    @Column(name = "img_url")
+    private String imgUrl;
 
     @Builder
-    public Image(String img_name, String img_key, String img_url) {
-        this.img_name = img_name;
-        this.img_key = img_key;
-        this.img_url = img_url;
+    public Image(String imgName, String imgKey, String imgUrl) {
+        this.imgName = imgName;
+        this.imgKey = imgKey;
+        this.imgUrl = imgUrl;
     }
 
     @Builder
-    public Image(Long img_id, String img_name) {
-        this.img_id = img_id;
-        this.img_name = img_name;
+    public Image(Long id, String imgName) {
+        this.id = id;
+        this.imgName = imgName;
     }
 }

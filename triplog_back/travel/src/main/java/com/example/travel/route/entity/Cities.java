@@ -1,23 +1,29 @@
 package com.example.travel.route.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+import jakarta.persistence.*;
 
 @Getter
-@ToString
+@Entity
+@Table(name = "cities")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cities {
-    private Long city_id;
-    private String city_name;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "city_name")
+    private String cityName;
 
     @Builder
-    public Cities(Long city_id, String city_name) {
-        this.city_id = city_id;
-        this.city_name = city_name;
+    public Cities(Long id, String cityName) {
+        this.id = id;
+        this.cityName = cityName;
     }
 
     @Builder
-    public Cities(String city_name) {
-        this.city_name = city_name;
+    public Cities(String cityName) {
+        this.cityName = cityName;
     }
 }

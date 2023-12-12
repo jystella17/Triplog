@@ -1,17 +1,11 @@
 package com.example.travel.route.repository;
 
 import com.example.travel.route.entity.KeywordList;
-import org.apache.ibatis.annotations.Mapper;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-@Mapper
-public interface KeywordListRepository {
+public interface KeywordListRepository extends JpaRepository<KeywordList, Long> {
 
-    List<KeywordList> findAllKeywordList();
-    KeywordList findKeywordListById(Long key_id);
     List<Long> findKeywordListByName(List<String> keyNames);
-    int addkeywordList(KeywordList key);
-    int delete(Long key_id);
-    int modify(KeywordList key);
 }

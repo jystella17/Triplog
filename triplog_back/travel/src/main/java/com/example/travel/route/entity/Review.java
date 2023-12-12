@@ -1,36 +1,42 @@
 package com.example.travel.route.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
-@ToString
+@Entity
+@Table(name = "review")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review {
-    private Long review_id;
-    private Long place_id;
-    private String review_text;
 
-    public Review() {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "place_id", referencedColumnName = "id")
+    private RoutePlace place;
+
+    @Column(name = "review_text")
+    private String reviewText;
+
+    @Builder
+    public Review(Long id, RoutePlace place, String reviewText) {
+        this.id = id;
+        this.place = place;
+        this.reviewText = reviewText;
     }
 
     @Builder
-    public Review(Long review_id, Long place_id, String review_text) {
-        this.review_id = review_id;
-        this.place_id = place_id;
-        this.review_text = review_text;
+    public Review(Long id, RoutePlace place) {
+        this.id = id;
+        this.place = place;
     }
 
     @Builder
-    public Review(Long review_id, Long place_id) {
-        this.review_id = review_id;
-        this.place_id = place_id;
-    }
-
-    @Builder
-    public Review(String review_text) {
-        this.review_text = review_text;
+    public Review(String reviewText) {
+        this.reviewText = reviewText;
     }
 }
