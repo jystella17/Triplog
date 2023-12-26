@@ -5,9 +5,9 @@ import jakarta.persistence.*;
 
 @Getter
 @Entity
-@Table(name = "cities")
+@Table(name = "city")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Cities {
+public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,13 +17,13 @@ public class Cities {
     private String cityName;
 
     @Builder
-    public Cities(Long id, String cityName) {
+    public City(Long id, String cityName) {
         this.id = id;
         this.cityName = cityName;
     }
 
     @Builder
-    public Cities(String cityName) {
+    public City(String cityName) {
         this.cityName = cityName;
     }
 }

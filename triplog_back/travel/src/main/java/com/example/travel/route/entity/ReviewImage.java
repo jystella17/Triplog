@@ -1,32 +1,36 @@
 package com.example.travel.route.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
-@ToString
+@Entity
+@Table(name = "review_img")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReviewImage {
 
-    private Long rv_id;
-    private Long review_id;
-    private Long img_id;
-    private String img_url;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    public ReviewImage() {}
+    @ManyToOne()
+    @JoinColumn()
+    private Review review;
+
+    @OneToOne()
+    @JoinColumn()
+    private Image image;
 
     @Builder
-    public ReviewImage(Long review_id, Long img_id, String img_url) {
-        this.review_id = review_id;
-        this.img_id = img_id;
-        this.img_url = img_url;
+    public ReviewImage(Review review, Image image) {
+        this.review = review;
+        this.image = image;
     }
 
     @Builder
-    public ReviewImage (Long rv_id, Long review_id, Long img_id, String img_url) {
-        this.rv_id = rv_id;
-        this.review_id = review_id;
-        this.img_id = img_id;
-        this.img_url = img_url;
+    public ReviewImage (Long id, Review review, Image image) {
+        this.id = id;
+        this.review = review;
+        this.image = image;
     }
 }

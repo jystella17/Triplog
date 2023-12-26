@@ -1,29 +1,29 @@
 package com.example.travel.route.service;
 
-import com.example.travel.route.entity.Cities;
-import com.example.travel.route.repository.CitiesRepository;
+import com.example.travel.route.entity.City;
+import com.example.travel.route.repository.CityRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
 
 @Service
-public class CitiesService {
+public class CityService {
 
-    private CitiesRepository cdao;
-    public CitiesService(CitiesRepository cdao) {
+    private CityRepository cdao;
+    public CityService(CityRepository cdao) {
         this.cdao = cdao;
     }
 
-    public int addCities(Cities city){
+    public int addCities(City city){
         return cdao.addCities(city);
     }
 
-    public Cities findCitiesById(Long city_id){
+    public City findCitiesById(Long city_id){
         return cdao.findCitiesById(city_id);
     }
 
-    public List<Cities> findAllCities() throws SQLException {
+    public List<City> findAllCities() throws SQLException {
         return cdao.findAllCities();
     }
 
@@ -31,7 +31,7 @@ public class CitiesService {
         return cdao.delete(city_id);
     }
 
-    public int modify(Cities city){
+    public int modify(City city){
         return  cdao.modify(city);
     }
 }

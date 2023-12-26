@@ -1,59 +1,62 @@
 package com.example.travel.route.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import com.example.travel.auth.entity.User;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
 @Getter
-@ToString
+@Entity
+@Table(name = "route")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Route {
 
-    private Long route_id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    private Long uid;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "uid")
+    private User owner;
 
-    private Long city_id;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "city_id", referencedColumnName = "id")
+    private City city;
 
-    private Long key_id;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "key_id", referencedColumnName = "id")
+    private KeywordList keyword;
 
-    private String route_name;
+    @Column(name = "route_name")
+    private String routeName;
 
-    private LocalDate route_day;
+    @Column(name = "route_day")
+    private LocalDate routeDay;
 
-    private MultipartFile route_img;
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "img_id", referencedColumnName = "id")
+    private Image thumbnail;
 
-    public Route() {
+    @Builder
+    public Route(User owner, City city, KeywordList keyword, String routeName, LocalDate routeDay, Image thumbnail) {
+        this.owner = owner;
+        this.city = city;
+        this.keyword = keyword;
+        this.routeName = routeName;
+        this.routeDay = routeDay;
+        this.thumbnail = thumbnail;
     }
 
     @Builder
-    public Route(Long uid, Long city_id, Long key_id, String route_name, LocalDate route_day) {
-        this.uid = uid;
-        this.city_id = city_id;
-        this.key_id = key_id;
-        this.route_name = route_name;
-        this.route_day = route_day;
-    }
-
-    @Builder
-    public Route(Long route_id, Long uid, Long city_id, Long key_id, String route_name, LocalDate route_day) {
-        this.route_id = route_id;
-        this.uid = uid;
-        this.city_id = city_id;
-        this.key_id = key_id;
-        this.route_name = route_name;
-        this.route_day = route_day;
-    }
-
-    @Builder
-    public Route(Long uid, Long city_id, Long key_id, String route_name, LocalDate route_day, MultipartFile route_img) {
-        this.uid = uid;
-        this.city_id = city_id;
-        this.key_id = key_id;
-        this.route_name = route_name;
-        this.route_day = route_day;
-        this.route_img = route_img;
+    public Route(Long id, User owner, City city, KeywordList keyword, String routeName, LocalDate routeDay, Image thumbnail) {
+        this.id = id;
+        this.owner = owner;
+        this.city = city;
+        this.keyword = keyword;
+        this.routeName = routeName;
+        this.routeDay = routeDay;
+        this.thumbnail = thumbnail;
     }
 }

@@ -4,67 +4,102 @@ import com.example.travel.route.dto.request.RouteCreateDto;
 import com.example.travel.route.dto.response.RouteResponseDto;
 import com.example.travel.route.entity.Image;
 import com.example.travel.route.entity.Route;
-import com.example.travel.route.entity.RouteImage;
 import com.example.travel.route.repository.ImageRepository;
-import com.example.travel.route.repository.RouteImageRepository;
 import com.example.travel.route.repository.RouteRepository;
 import com.example.travel.route.S3.S3Uploader;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RouteService {
 
     private final S3Uploader uploader;
-    private RouteRepository routeRepository;
-    private ImageRepository imageRepository;
-    private RouteImageRepository routeImageRepository;
+    private final RouteRepository routeRepository;
+    private final ImageRepository imageRepository;
 
-    public RouteService(S3Uploader uploader, RouteRepository routeRepository, ImageRepository imageRepository, RouteImageRepository routeImageRepository) {
-        this.uploader = uploader;
-        this.routeRepository = routeRepository;
-        this.imageRepository = imageRepository;
-        this.routeImageRepository = routeImageRepository;
-    }
-
+    @Transactional
     public List<RouteResponseDto> findAllRoute(){
-        List<RouteResponseDto> route = routeRepository.findAllRoute();
-        System.out.println("All Routes: " + route.size());
+        List<Route> route = routeRepository.findAll();
+        List<RouteResponseDto> routeList = new ArrayList<RouteResponseDto>();
 
-        return routeRepository.findAllRoute();
+        for(Route r: route) {
+            RouteResponseDto info = RouteResponseDto.builder().routeId(r.getId()).cityName(r.getCity().getCityName())
+                            .keyword(r.getKeyword().getKeyword()).routeName(r.getRouteName()).routeDay(r.getRouteDay())
+                            .imgUrl(r.getThumbnail().getImgUrl()).build();
+        }
+
+        return routeList;
     }
 
-    public RouteResponseDto findRouteById(Long route_id){
-        return routeRepository.findRouteById(route_id);
+    @Transactional
+    public RouteResponseDto findRouteById(Long route_id) {
+        Route route = routeRepository.findById(route_id).get();
+
+        return RouteResponseDto.builder().routeId(route.getId()).cityName(route.getCity().getCityName())
+                .keyword(route.getKeyword().getKeyword()).routeName(route.getRouteName()).routeDay(route.getRouteDay())
+                .imgUrl(route.getThumbnail().getImgUrl()).build();
     }
+
+    // 검색 단어를 포함하는 루트
+    @Transactional
     public List<RouteResponseDto> findRouteByName(String route_name) {
-        return routeRepository.findRouteByName(route_name);
+        List<Route> routeList = routeRepository.findByRouteName(route_name);
+        List<RouteResponseDto> result = new ArrayList<RouteResponseDto>();
+
+        for(Route r: routeList) {
+            RouteResponseDto info = RouteResponseDto.builder().routeId(r.getId()).cityName(r.getCity().getCityName())
+                    .keyword(r.getKeyword().getKeyword()).routeName(r.getRouteName()).routeDay(r.getRouteDay())
+                    .imgUrl(r.getThumbnail().getImgUrl()).build();
+        }
+
+        return result;
     }
+
+    @Transactional
     public List<RouteResponseDto> findRouteByKeyName(String keyword){
         return routeRepository.findRouteByKeyName(keyword);
     }
+
+    @Transactional
     public List<RouteResponseDto> findRouteByKeyNameTop3(String keyword){
-        return routeRepository.findRouteByKeyNameTop3(keyword);
-    }
-    public List<RouteResponseDto> findRouteByCityName(String city_name){
-        return routeRepository.findRouteByCityName(city_name);
+        return routeRepository.findByKeywordOrderById(keyword);
     }
 
+    @Transactional
+    public List<RouteResponseDto> findRouteByCityName(String cityName){
+        return routeRepository.findRouteByCityName(cityName);
+    }
+
+    @Transactional
     public List<RouteResponseDto> findRouteByKeyword(Long key_id){
         return routeRepository.findRouteByKeyword(key_id);
     }
 
+    @Transactional
     public List<RouteResponseDto> findRouteByUser(Long uid){
         return routeRepository.findRouteByUser(uid);
     }
-    public List<RouteResponseDto> findAllRouteByUser(Long uid) {return routeRepository.findAllRouteByUser(uid);}
+
+    @Transactional
+    public List<RouteResponseDto> findAllRouteByUser(Long uid) {
+        return routeRepository.findAllRouteByUser(uid);
+    }
+
+    @Transactional
     public List<RouteResponseDto> findRouteBySpot(String spot_name){
         return routeRepository.findRouteBySpot(spot_name);
     }
 
+    @Transactional
     public Long addRoute(RouteCreateDto route) throws IOException {
         MultipartFile img = route.getImage();
         String imgUrl = uploader.uploadFiles(img, "route");
@@ -86,10 +121,12 @@ public class RouteService {
         return route_id;
     }
 
+    @Transactional
     public int delete(Long route_id){
         return routeRepository.delete(route_id);
     }
 
+    @Transactional
     public int modify(Route route){
         return routeRepository.modify(route);
     }

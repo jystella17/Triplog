@@ -1,6 +1,6 @@
 package com.example.travel.route.controller;
 
-import com.example.travel.route.entity.Cities;
+import com.example.travel.route.entity.City;
 import com.example.travel.route.service.CitiesService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class CityController {
     @GetMapping
     public ResponseEntity<?> findAllCities() {
         try{
-            List<Cities> cityList = service.findAllCities();
+            List<City> cityList = service.findAllCities();
 
             if(cityList != null && !cityList.isEmpty()) {
                 return new ResponseEntity<>(cityList, HttpStatus.OK);

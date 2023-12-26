@@ -1,7 +1,7 @@
 package com.example.travel.route.service;
 
 import com.example.travel.route.dto.response.RouteResponseDto;
-import com.example.travel.route.entity.Cities;
+import com.example.travel.route.entity.City;
 import com.example.travel.route.entity.KeywordList;
 import com.example.travel.route.entity.Route;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-// @Transactional
 class RouteServiceTest {
 
     @Autowired
@@ -21,7 +20,7 @@ class RouteServiceTest {
     @Autowired
     private SpotInfoService spotInfoService;
     @Autowired
-    private CitiesService citiesService;
+    private CityService cityService;
     @Autowired
     private KeywordListService keywordListService;
     @Test
@@ -44,7 +43,7 @@ class RouteServiceTest {
         // 3. SpotInfo 조회
         // 4. RoutePlace 생성
         Long city_id = 1L;
-        Cities city = citiesService.findCitiesById(city_id);
+        City city = cityService.findCitiesById(city_id);
         Long uid = 1L;
         KeywordList key1 = keywordListService.findKeywordListById(1L);
         KeywordList key2 = keywordListService.findKeywordListById(2L);
